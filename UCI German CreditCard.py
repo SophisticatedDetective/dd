@@ -7,6 +7,7 @@ from sklearn.linear_model import SGDClassifier,LogisticRegressionCV,RidgeClassif
 import xgboost as xgb
 import lightgbm as lgb
 import catboost as cb
+from sklearn.model_selection import GridSearchCV,KFold,StratifiedKFold
 with open(r'C:\Users\chd\Pictures\UCI Statlog (German Credit Data) 原始数据数值化.csv','r') as f_uci_german:
     uci_german=pd.read_csv(f_uci_german)#读取完数据自动关闭文件    
 uci_german.shape
@@ -30,3 +31,9 @@ error4=mean_squared_error(y_test,pred4)
 rcv=RidgeClassifierCV().fit(x_train,y_train)
 pred5=rcv.predict(x_test)
 error5=mean_squared_error(y_test,pred5)
+xgb_model=xgb.XGBClassifier(max_depth=6,learning_rate=0.001,n_estimators=1000,nthred=4,subsample=0.8)
+xgb_model.fit(x_train,y_train)
+pred6=xgb_model.predict(x_test)
+error6=mean_squared_error(y_test,pred6)
+lgb_model=lgb.LGBMClassifier(learning_rate=0.001,n_estimators=1000).fit(x_train,y_train)
+error7=mean_squared_error(y_test,pred7)
