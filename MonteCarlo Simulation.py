@@ -6,7 +6,7 @@ sjht=ts.get_hist_data('002602')
 #sjht.shape
 #sjht.head()
 alter_sjht=sjht.sort_index(ascending=True)#按时间升序排列
-t=1000
+t=180
 s0=alter_sjht['close'][0]#初始股价
 #s0
 data=alter_sjht['close']#收盘价数据
@@ -20,15 +20,18 @@ re=return_on_data.mean()#平均收益率
 sigma=np.std(return_on_data)#收益率标准差
 #sigma
 #Out[37]: 0.031073640396856346
-n=2000
+n=180
+r1=return_on_data[1]
+
 dt=t/n
+I=1000
 d=(re-0.5*sigma**2)*dt#drift项
-K=np.zeros((n+1,1))
-K[0,0]=np.log(s0)
+K=np.zeros((n+1,I))
+K[0,:]=[r1]*I
 for i in range(1,n+1):
-    K[i,0]=K[i-1,0]+d+sigma*np.sqrt(dt)*np.random.standard_normal()
+    K[i,:]=K[i-1,:]+d+sigma*np.sqrt(dt)*np.random.uniform(-0.1,0.1,I)
 #matplotlib inline  #启用该项可以窗口内查看图片
-plt.plot(np.exp(K))
+plt.plot(pd.DataFrame(s0*np.exp(1+K)))
 plt.rcParams['font.sans-serif']=['SimHei']#正常显示中文
 plt.rcParams['axes.unicode_minus']=False#正常显示负号
 plt.title('世纪华通股价蒙特卡洛模拟，arthor:chendu')
