@@ -29,4 +29,10 @@ for i in range(1,n+1):
     K[i,0]=K[i-1,0]+d+sigma*np.sqrt(dt)*np.random.standard_normal()
 #matplotlib inline  #启用该项可以窗口内查看图片
 plt.plot(np.exp(K))
+plt.rcParams['font.sans-serif']=['SimHei']#正常显示中文
+plt.rcParams['axes.unicode_minus']=False#正常显示负号
+plt.title('世纪华通股价蒙特卡洛模拟，arthor:chendu')
+plt.legend('模拟股价')
+plt.xlabel('步数')
+plt.ylabel('股价')
 #plt.gcf()
