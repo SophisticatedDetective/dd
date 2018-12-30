@@ -1,11 +1,11 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
 import tushare as ts
 sjht=ts.get_hist_data('002602')
 #sjht.shape
 #sjht.head()
 alter_sjht=sjht.sort_index(ascending=True)#按时间升序排列
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
 t=1000
 s0=alter_sjht['close'][0]#初始股价
 #s0
