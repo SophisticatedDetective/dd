@@ -22,16 +22,15 @@ sigma=np.std(return_on_data)#收益率标准差
 #Out[37]: 0.031073640396856346
 n=180
 r1=return_on_data[1]
-
 dt=t/n
-I=1000
+I=10000
 d=(re-0.5*sigma**2)*dt#drift项
 K=np.zeros((n+1,I))
 K[0,:]=[r1]*I
 for i in range(1,n+1):
     K[i,:]=K[i-1,:]+d+sigma*np.sqrt(dt)*np.random.uniform(-0.1,0.1,I)
 #matplotlib inline  #启用该项可以窗口内查看图片
-plt.plot(pd.DataFrame(s0*np.exp(1+K)))
+plt.plot(s0*K))
 plt.rcParams['font.sans-serif']=['SimHei']#正常显示中文
 plt.rcParams['axes.unicode_minus']=False#正常显示负号
 plt.title('世纪华通股价蒙特卡洛模拟，arthor:chendu')
