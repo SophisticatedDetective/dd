@@ -1,0 +1,46 @@
+clear all;#清除前边所有变量（清屏）
+close all;#关闭所有变量
+clc#清除所有变量
+%% set the following numbers to simulate your cases 
+test_time = 100;
+time_point = 24;
+summary_result = zeros(test_time,time_point);#创建一个test_time行，time_point列的全零矩阵summary_result
+station_number = 1000;
+threshold_level = 0.76;
+
+%% simulation loop#模拟循环
+for ii = 1:test_time#一共循环test_time次
+   result_matrix = zeros(station_number,time_point);创建一个station_number行，time_point列的全零矩阵result_matrix
+k = 1; %good or bad
+tau_matrix = ones(station_number,time_point+1);#创建station_number行，time_point+1列的全1矩阵tau_matrix
+lambda = 0.1; % play with different number
+
+
+for i = 1:time_point#第一层循环（外循环），循环time_point次
+    for j = 1:station_number#第二层循环（内循环），循环station_number次，大循环一共循环time_point*station_number次
+
+tau = tau_matrix(j,i);#新建变量tau，等于tau_matrix这个矩阵第j行第i列的数值
+prob = (exp(-lambda*tau)*(lambda*tau)^k); %treat the broken time as Poisson #定义新的概率变量prob服从泊松分布，参数就是定义里的参数组合
+
+x = rand();#生成0-1之间一个随机数
+if x < prob#条件选择，如果if语句逻辑值为真即x < prob成立，设置新变量select = 0，tau_matrix矩阵的第j行第i+1列设置为1
+  select = 0;
+  tau_matrix(j,i+1) = 1;
+else#如果是其他情况，即x >= prob,设置新变量select = 1，tau_matrix矩阵的第j行第i+1列设置为tau_matrix矩阵的第j行第i列的值加上1
+  select = 1;
+  tau_matrix(j,i+1) = tau_matrix (j,i) + 1; 
+end
+
+result_matrix(j,i) = select;#result_matrix矩阵第j行第i列设置为select变量的数值
+
+end
+end#结束循环标志
+
+summary_result(ii,:) = sum(result_matrix,1)./station_number;#summary_result矩阵第ii行的向量值是result_matrix矩阵按列求和然后全部点除以station_number得到的新向量
+
+end
+
+size(find(summary_result < threshold_level))#统计summary_result矩阵中小于threshold_level的数值的个数
+%% plot the result for different time point
+bar_figure = sum(result_matrix,1)./station_number;
+bar(bar_figure)#把bar_figure矩阵的数值用条状图画出来
